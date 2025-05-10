@@ -139,6 +139,10 @@
   .bearsampp_pricing_tables {
     width: 100% !important;
   }
+  .bearsampp_pricing_tables-container {
+    display: flex;
+  }
+  
   .bearsampp_pricing_tables .plan-title,
   .bearsampp_pricing_tables .plan-select a {
     -webkit-transform: translateY(0);
