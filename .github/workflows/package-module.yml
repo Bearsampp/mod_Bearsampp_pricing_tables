@@ -83,25 +83,17 @@ jobs:
             cp "$XML_FILE" "${XML_FILE}.bak"
             
             # Display original content
-            echo "Original XML content:"
-            cat "$XML_FILE"
+            echo "Original XML content (specific lines):"
+            grep -A 6 "<creationDate>" "$XML_FILE" || true
             
-            # Update version using perl for more reliable regex handling
-            perl -i -pe 's|(<version>).*?(</version>)|$1${{ env.VERSION }}$2|g' "$XML_FILE"
-            
-            # Update creationDate
-            perl -i -pe 's|(<creationDate>).*?(</creationDate>)|$1${{ env.CREATION_DATE }}$2|g' "$XML_FILE"
-            
-            # Update copyright year
-            perl -i -pe 's|(<copyright>Copyright \(C\))[0-9]{4}( Bearsampp</copyright>)|$1${{ env.CURRENT_YEAR }}$2|g' "$XML_FILE"
+            # Update version, creationDate, and copyright using sed with exact line matching
+            sed -i "s|<version>.*</version>|<version>${{ env.VERSION }}</version>|g" "$XML_FILE"
+            sed -i "s|<creationDate>.*</creationDate>|<creationDate>${{ env.CREATION_DATE }}</creationDate>|g" "$XML_FILE"
+            sed -i "s|<copyright>Copyright (C)[0-9]\{4\} Bearsampp</copyright>|<copyright>Copyright (C)${{ env.CURRENT_YEAR }} Bearsampp</copyright>|g" "$XML_FILE"
             
             echo "Updated XML file in repository"
-            echo "Updated XML content:"
-            cat "$XML_FILE"
-            
-            # Show diff of changes
-            echo "Changes made to XML file:"
-            diff "${XML_FILE}.bak" "$XML_FILE" || true
+            echo "Updated XML content (specific lines):"
+            grep -A 6 "<creationDate>" "$XML_FILE" || true
             
             # Save the directory path for later use
             MODULE_DIR=$(dirname "$XML_FILE")
