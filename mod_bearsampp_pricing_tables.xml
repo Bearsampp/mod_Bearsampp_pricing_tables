@@ -23,6 +23,7 @@
 	</files>
 	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.MOD_BEARSAMPP_pricing_tables.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.MOD_BEARSAMPP_pricing_tables.sys.ini</language>
 	</languages>
 	<config>	
 		<fields name="params" addfieldpath="/modules/mod_bearsampp_pricing_tables/elements">
