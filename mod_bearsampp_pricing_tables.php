@@ -14,6 +14,15 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+
+// Load admin CSS if in admin area
+$app = Factory::getApplication();
+if ($app->isClient('administrator')) {
+    $document = $app->getDocument();
+    $document->addStyleSheet(Uri::root(true) . '/modules/mod_bearsampp_pricing_tables/css/admin.css');
+}
 
 // Include helper file
 require_once __DIR__ . '/helper.php';
