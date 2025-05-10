@@ -89,12 +89,11 @@ $bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-t
 $bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-price { color:' . $bearsampp_price_color . '; }';
 $bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-type { color:' . $bearsampp_pricesub_color . '; }';
 $bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-features { color:' . $bearsampp_features_color . '; }';
-$bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-select a { background-color: ' . $bearsampp_button_color . '; }';
-$bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-select a:hover { background: ' . $bearsampp_button_color . '; }';
+$bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-select a, .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-select a.btn { background-color: ' . $bearsampp_button_color . '; color: #ffffff; }';
+$bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-select a:hover, .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .plan-select a.btn:hover { background-color: ' . $bearsampp_button_color . '; opacity: 0.9; }';
 $bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .featured.plan { }';
-$bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .featured .plan-select a { background-color: ' . $bearsampp_highlight_bg . '; }';
 $bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .featured header { background-color: ' . $bearsampp_highlight_bg . '; }';
-$bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .featured header:after { border-color: ' . $bearsampp_highlight_bg . ' transparent transparent transparent; }';
+$bearsampp_css .= ' .bearsampp_pricing_tables' . $bearsampp_moduleid . ' .featured header:after { border-color: ' . $bearsampp_header_bg . ' transparent transparent transparent; }';
 
 // Put styling in header
 $document->addStyleDeclaration($bearsampp_css);
