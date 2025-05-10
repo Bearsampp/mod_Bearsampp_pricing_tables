@@ -77,7 +77,7 @@ for ($i = 1; $i <= $max_images; $i++) {
 // Load CSS/JS
 // Update for Joomla 5: Use Factory::getDocument() instead of JFactory
 $document = Factory::getDocument();
-$document->addStyleSheet(Uri::base() . 'modules/MOD_BEARSAMPP_pricing_tables/css/style.css');
+$document->addStyleSheet(Uri::base() . 'modules/mod_bearsampp_pricing_tables/css/style.css');
 
 // Styling from module parameters
 $bearsampp_css = '';

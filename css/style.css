@@ -130,11 +130,6 @@
 .bearsampp_pricing_tables .featured header:after {
   border-color: #222f3d transparent transparent transparent;
 }
-.bearsampp_pricing_tables .featured .plan-title,
-.bearsampp_pricing_tables .featured .plan-price,
-.bearsampp_pricing_tables .featured .plan-type {
-  color: #ffffff;
-}
 .bearsampp_pricing_tables .featured .plan-select {
   padding: 30px 20px;
 }
