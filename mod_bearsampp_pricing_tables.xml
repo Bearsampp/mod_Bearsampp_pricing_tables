@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>support@bearsampp.com</authorEmail>
 	<authorUrl>http://bearsampp.com</authorUrl>
-	<version>2025.05.10.10</version>
+	<version>2025.05.10.11</version>
 	<description><![CDATA[<link href="../modules/mod_bearsampp_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing Tables module by Bearsampp]]></description>
 	<namespace path="src">Bearsampp\Module\PricingTables</namespace>
 	<files>
@@ -28,7 +28,7 @@
 	<config>	
 		<fields name="params" addfieldpath="/modules/mod_bearsampp_pricing_tables/elements">
 			
-			<fieldset name="MOD_BEARSAMPP_GENERALSETTINGS_FIELDSET_LABEL">
+			<fieldset name="MOD_BEARSAMPP_GENERALSETTINGS">
 				<field name="bearsampp_num_images" type="radio" default="3" label="MOD_BEARSAMPP_NUMIMAGES" description="MOD_BEARSAMPP_NUMIMAGES_DESC"
 				checked="checked" 
 				class="btn-group">
