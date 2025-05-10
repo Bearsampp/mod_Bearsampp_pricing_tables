@@ -1,0 +1,77 @@
+name: Package Bearsampp Pricing Tables Module
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  workflow_dispatch:
+    # Allows manual triggering
+
+jobs:
+  build-package:
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          
+      - name: Get current date
+        id: date
+        run: echo "VERSION=$(date +'%Y.%-m.%-d')" >> $GITHUB_ENV
+      
+      - name: Create package directory
+        run: mkdir -p package/mod_bearsampp_pricing_tables
+      
+      - name: Copy module files
+        run: |
+          cp mod_bearsampp_pricing_tables.php package/mod_bearsampp_pricing_tables/
+          cp mod_bearsampp_pricing_tables.xml package/mod_bearsampp_pricing_tables/
+          cp helper.php package/mod_bearsampp_pricing_tables/
+          cp License.txt package/mod_bearsampp_pricing_tables/
+          cp index.html package/mod_bearsampp_pricing_tables/
+          cp -r css package/mod_bearsampp_pricing_tables/
+          cp -r elements package/mod_bearsampp_pricing_tables/
+          cp -r tmpl package/mod_bearsampp_pricing_tables/
+          cp -r language package/mod_bearsampp_pricing_tables/
+      
+      - name: Update version in XML file
+        run: |
+          sed -i "s/<version>.*<\/version>/<version>${{ env.VERSION }}<\/version>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+          sed -i "s/<creationDate>.*<\/creationDate>/<creationDate>$(date +'%B %Y')<\/creationDate>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+      
+      - name: Generate directory tree
+        run: |
+          apt-get update && apt-get install -y tree
+          tree package/mod_bearsampp_pricing_tables > package/directory-structure.txt
+      
+      - name: Create ZIP archive
+        run: |
+          cd package
+          zip -r mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip mod_bearsampp_pricing_tables
+      
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Bearsampp Pricing Tables v${{ env.VERSION }}
+          files: |
+            package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
+            package/directory-structure.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload to GitHub Packages
+        uses: actions/upload-artifact@v3
+        with:
+          name: mod_bearsampp_pricing_tables
+          path: package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
