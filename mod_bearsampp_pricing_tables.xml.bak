@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>support@bearsampp.com</authorEmail>
 	<authorUrl>http://bearsampp.com</authorUrl>
-	<version>2025.05.10.3</version>
+	<version>2025.05.10.5</version>
 	<description><![CDATA[<link href="../modules/mod_bearsampp_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing Tables module by Bearsampp]]></description>
 	<namespace path="src">Bearsampp\Module\PricingTables</namespace>
 	<files>
@@ -22,8 +22,8 @@
 		<folder>language</folder>
 	</files>
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.MOD_BEARSAMPP_pricing_tables.ini</language>
-		<language tag="en-GB">language/en-GB/en-GB.MOD_BEARSAMPP_pricing_tables.sys.ini</language>
+		<language tag="en-GB">language/en-GB/mod_bearsampp_pricing_tables.ini</language>
+		<language tag="en-GB">language/en-GB/mod_bearsampp_pricing_tables.sys.ini</language>
 	</languages>
 	<config>	
 		<fields name="params" addfieldpath="/modules/mod_bearsampp_pricing_tables/elements">
