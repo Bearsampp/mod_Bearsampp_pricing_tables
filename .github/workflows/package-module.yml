@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
       
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -25,9 +27,39 @@ jobs:
       - name: Get current date
         id: date
         run: |
-          echo "VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+          echo "BASE_VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
           echo "CREATION_DATE=$(date +'%Y %B %d')" >> $GITHUB_ENV
           echo "CURRENT_YEAR=$(date +'%Y')" >> $GITHUB_ENV
+      
+      - name: Check for existing tags and resolve version conflicts
+        run: |
+          # Get all existing tags
+          git fetch --tags
+          
+          # Check if the base version tag already exists
+          BASE_TAG="v${{ env.BASE_VERSION }}"
+          if git rev-parse "$BASE_TAG" >/dev/null 2>&1; then
+            echo "Tag $BASE_TAG already exists, finding next available version..."
+            
+            # Find all tags that match the pattern v{BASE_VERSION}.{n}
+            MATCHING_TAGS=$(git tag -l "$BASE_TAG.*")
+            
+            if [ -z "$MATCHING_TAGS" ]; then
+              # No sub-versions exist, use .1
+              NEXT_VERSION="${{ env.BASE_VERSION }}.1"
+            else
+              # Find the highest sub-version
+              HIGHEST_SUBVERSION=$(echo "$MATCHING_TAGS" | sed "s/^$BASE_TAG\.//" | sort -n | tail -1)
+              NEXT_SUBVERSION=$((HIGHEST_SUBVERSION + 1))
+              NEXT_VERSION="${{ env.BASE_VERSION }}.$NEXT_SUBVERSION"
+            fi
+            
+            echo "VERSION=$NEXT_VERSION" >> $GITHUB_ENV
+            echo "Using version: $NEXT_VERSION"
+          else
+            echo "VERSION=${{ env.BASE_VERSION }}" >> $GITHUB_ENV
+            echo "Using base version: ${{ env.BASE_VERSION }}"
+          fi
       
       - name: Create package directory
         run: mkdir -p package/mod_bearsampp_pricing_tables
@@ -47,7 +79,7 @@ jobs:
       - name: Update version in XML file
         run: |
           if [ -f "package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml" ]; then
-            # Update version to YYYY.mm.dd format
+            # Update version to YYYY.mm.dd[.n] format
             sed -i "s/<version>.*<\/version>/<version>${{ env.VERSION }}<\/version>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
             
             # Update creationDate to "YYYY Month DD" format
@@ -78,6 +110,7 @@ jobs:
         run: |
           cd package
           zip -r mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip mod_bearsampp_pricing_tables
+          echo "Created ZIP archive: mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip"
       
       - name: Create GitHub Release
         id: create_release

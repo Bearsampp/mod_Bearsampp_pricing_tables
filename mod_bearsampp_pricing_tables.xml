@@ -9,7 +9,7 @@
 	<authorUrl>http://bearsampp.com</authorUrl>
 	<version>1</version>
 	<description><![CDATA[<link href="../modules/mod_bearsampp_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing-Table module by bearsampp]]></description>
-	<namespace path="src">Bearsampp\Module\PricingTable</namespace>
+	<namespace path="src">Bearsampp\Module\PricingTables</namespace>
 	<files>
 		<filename module="mod_bearsampp_pricing_tables">mod_bearsampp_pricing_tables.php</filename>
 		<filename module="mod_bearsampp_pricing_tables">mod_bearsampp_pricing_tables.xml</filename>
