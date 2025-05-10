@@ -37,11 +37,11 @@ jobs:
           git fetch --tags
           
           # Check if the base version tag already exists
-          BASE_TAG="v${{ env.BASE_VERSION }}"
+          BASE_TAG="${{ env.BASE_VERSION }}"
           if git rev-parse "$BASE_TAG" >/dev/null 2>&1; then
             echo "Tag $BASE_TAG already exists, finding next available version..."
             
-            # Find all tags that match the pattern v{BASE_VERSION}.{n}
+            # Find all tags that match the pattern {BASE_VERSION}.{n}
             MATCHING_TAGS=$(git tag -l "$BASE_TAG.*")
             
             if [ -z "$MATCHING_TAGS" ]; then
@@ -116,15 +116,15 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ env.VERSION }}
-          name: Bearsampp Pricing Tables v${{ env.VERSION }}
+          tag_name: ${{ env.VERSION }}
+          name: Bearsampp Pricing Tables ${{ env.VERSION }}
           files: |
             package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
             package/directory-structure.txt
           draft: false
           prerelease: false
           body: |
-            Bearsampp Pricing Tables Module v${{ env.VERSION }}
+            Bearsampp Pricing Tables Module ${{ env.VERSION }}
             
             ### Download Options:
             - Download directly from this release page
