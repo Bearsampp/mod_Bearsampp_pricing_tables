@@ -84,7 +84,7 @@ jobs:
             
             # Display original content
             echo "Original XML content:"
-            cat "$XML_FILE" | grep -E "<version>|<creationDate>|<copyright>"
+            cat "$XML_FILE"
             
             # Update version using perl for more reliable regex handling
             perl -i -pe 's|(<version>).*?(</version>)|$1${{ env.VERSION }}$2|g' "$XML_FILE"
@@ -97,7 +97,7 @@ jobs:
             
             echo "Updated XML file in repository"
             echo "Updated XML content:"
-            cat "$XML_FILE" | grep -E "<version>|<creationDate>|<copyright>"
+            cat "$XML_FILE"
             
             # Show diff of changes
             echo "Changes made to XML file:"
@@ -211,7 +211,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      # Upload artifact for easy access from GitHub Actions
       # Upload artifact for easy access from GitHub Actions
       - name: Upload to GitHub Artifacts
         id: upload_artifact
