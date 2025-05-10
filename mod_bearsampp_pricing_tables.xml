@@ -28,7 +28,7 @@
 	<config>	
 		<fields name="params" addfieldpath="/modules/mod_bearsampp_pricing_tables/elements">
 			
-			<fieldset name="basic" label="MOD_BEARSAMPP_GENERALSETTINGS_FIELDSET_LABEL">
+			<fieldset name="MOD_BEARSAMPP_GENERALSETTINGS_FIELDSET_LABEL">
 				<field name="bearsampp_num_images" type="radio" default="3" label="MOD_BEARSAMPP_NUMIMAGES" description="MOD_BEARSAMPP_NUMIMAGES_DESC"
 				checked="checked" 
 				class="btn-group">
