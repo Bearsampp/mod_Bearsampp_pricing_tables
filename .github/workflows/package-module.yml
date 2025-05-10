@@ -12,12 +12,15 @@ jobs:
   build-package:
     if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Explicitly grant permission to write to repository
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Fetch all history for proper versioning
+          token: ${{ secrets.GITHUB_TOKEN }}  # Needed for pushing changes
       
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -76,29 +79,50 @@ jobs:
           cp -r tmpl package/mod_bearsampp_pricing_tables/
           cp -r language package/mod_bearsampp_pricing_tables/
       
-      - name: Update version in XML file
+      - name: Update XML file in repository
         run: |
-          if [ -f "package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml" ]; then
-            # Update version to YYYY.mm.dd[.n] format
-            sed -i "s/<version>.*<\/version>/<version>${{ env.VERSION }}<\/version>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+          XML_FILE="mod_bearsampp_pricing_tables.xml"
+          if [ -f "$XML_FILE" ]; then
+            # Make a backup of the original file
+            cp "$XML_FILE" "${XML_FILE}.bak"
             
-            # Update creationDate to "YYYY Month DD" format
-            sed -i "s/<creationDate>.*<\/creationDate>/<creationDate>${{ env.CREATION_DATE }}<\/creationDate>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+            # Display original content
+            echo "Original XML content:"
+            cat "$XML_FILE" | grep -E "<version>|<creationDate>|<copyright>"
             
-            # Update copyright year to current year in YYYY format
-            sed -i "s/<copyright>Copyright (C)[0-9]\{4\} Bearsampp<\/copyright>/<copyright>Copyright (C)${{ env.CURRENT_YEAR }} Bearsampp<\/copyright>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+            # Update version using perl for more reliable regex handling
+            perl -i -pe 's|(<version>).*?(</version>)|$1${{ env.VERSION }}$2|g' "$XML_FILE"
             
-            echo "Updated version in XML file to ${{ env.VERSION }}"
-            echo "Updated creationDate in XML file to ${{ env.CREATION_DATE }}"
-            echo "Updated copyright year to ${{ env.CURRENT_YEAR }}"
+            # Update creationDate
+            perl -i -pe 's|(<creationDate>).*?(</creationDate>)|$1${{ env.CREATION_DATE }}$2|g' "$XML_FILE"
             
-            # Display the updated XML content
+            # Update copyright year
+            perl -i -pe 's|(<copyright>Copyright \(C\))[0-9]{4}( Bearsampp</copyright>)|$1${{ env.CURRENT_YEAR }}$2|g' "$XML_FILE"
+            
+            echo "Updated XML file in repository"
             echo "Updated XML content:"
-            grep -A 1 -B 1 "<version>" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
-            grep -A 1 -B 1 "<creationDate>" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
-            grep -A 1 -B 1 "<copyright>" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+            cat "$XML_FILE" | grep -E "<version>|<creationDate>|<copyright>"
+            
+            # Show diff of changes
+            echo "Changes made to XML file:"
+            diff "${XML_FILE}.bak" "$XML_FILE" || true
           else
-            echo "::warning::XML file not found, skipping version update"
+            echo "::warning::XML file not found in repository, skipping update"
+          fi
+      
+      - name: Commit changes to repository
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Check if there are changes to commit
+          if git diff --exit-code; then
+            echo "No changes to commit"
+          else
+            git add "mod_bearsampp_pricing_tables.xml"
+            git commit -m "Update version to ${{ env.VERSION }}, creation date to ${{ env.CREATION_DATE }}, and copyright year to ${{ env.CURRENT_YEAR }}"
+            git push origin main
+            echo "Changes committed and pushed to repository"
           fi
       
       - name: Generate directory tree
@@ -129,6 +153,11 @@ jobs:
             ### Download Options:
             - Download directly from this release page
             - Access the artifact from the Actions tab of this workflow run
+            
+            ### Changes:
+            - Updated version to ${{ env.VERSION }}
+            - Updated creation date to ${{ env.CREATION_DATE }}
+            - Updated copyright year to ${{ env.CURRENT_YEAR }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
