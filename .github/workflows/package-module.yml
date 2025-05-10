@@ -67,11 +67,27 @@ jobs:
             package/directory-structure.txt
           draft: false
           prerelease: false
+          body: |
+            Bearsampp Pricing Tables Module v${{ env.VERSION }}
+            
+            ### Download Options:
+            - Download directly from this release page
+            - Access the artifact from the Actions tab of this workflow run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Upload to GitHub Packages
+      # Upload artifact for easy access from GitHub Actions
+      - name: Upload to GitHub Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: mod_bearsampp_pricing_tables
+          name: mod_bearsampp_pricing_tables_${{ env.VERSION }}
           path: package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
+          retention-days: 90
+          if-no-files-found: error
+      
+      # Add information about downloading the artifact
+      - name: Artifact Download Information
+        run: |
+          echo "::notice::The module package has been uploaded as an artifact."
+          echo "::notice::You can download it from the Actions tab of this workflow run."
+          echo "::notice::Go to Actions → This workflow → This run → Artifacts section → Download 'mod_bearsampp_pricing_tables_${{ env.VERSION }}'"
