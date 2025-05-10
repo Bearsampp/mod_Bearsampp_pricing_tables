@@ -80,7 +80,7 @@ jobs:
       # Upload artifact for easy access from GitHub Actions
       - name: Upload to GitHub Artifacts
         id: upload_artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: mod_bearsampp_pricing_tables_${{ env.VERSION }}
           path: package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
