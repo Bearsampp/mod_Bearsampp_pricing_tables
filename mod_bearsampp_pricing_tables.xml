@@ -2,12 +2,12 @@
 <extension type="module" version="5.0" client="site" method="upgrade">
 	<name>Bearsampp Pricing Tables</name>
 	<author>Bearsampp</author>
-	<creationDate>May 2025</creationDate>
+	<creationDate>2025 May 10</creationDate>
 	<copyright>Copyright (C)2025 Bearsampp</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>support@bearsampp.com</authorEmail>
 	<authorUrl>http://bearsampp.com</authorUrl>
-	<version>1</version>
+	<version>2025.05.10.1</version>
 	<description><![CDATA[<link href="../modules/mod_bearsampp_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing-Table module by bearsampp]]></description>
 	<namespace path="src">Bearsampp\Module\PricingTables</namespace>
 	<files>
