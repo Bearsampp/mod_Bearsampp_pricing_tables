@@ -7,6 +7,9 @@
 .bearsampp_pricing_tables-outer {
   text-align: center;
 }
+.bearsampp_pricing_tables-container {
+  display: flex;
+  }
 .bearsampp_pricing_tables {
   box-sizing: border-box;
   color: #ffffff;
