@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>support@bearsampp.com</authorEmail>
 	<authorUrl>http://bearsampp.com</authorUrl>
-	<version>2025.5.10</version>
+	<version>1</version>
 	<description><![CDATA[<link href="../modules/mod_bearsampp_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing-Table module by bearsampp]]></description>
 	<namespace path="src">Bearsampp\Module\PricingTable</namespace>
 	<files>

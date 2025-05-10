@@ -24,7 +24,9 @@ jobs:
           
       - name: Get current date
         id: date
-        run: echo "VERSION=$(date +'%Y.%-m.%-d')" >> $GITHUB_ENV
+        run: |
+          echo "VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+          echo "CREATION_DATE=$(date +'%Y %B %d')" >> $GITHUB_ENV
       
       - name: Create package directory
         run: mkdir -p package/mod_bearsampp_pricing_tables
@@ -43,8 +45,23 @@ jobs:
       
       - name: Update version in XML file
         run: |
-          sed -i "s/<version>.*<\/version>/<version>${{ env.VERSION }}<\/version>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
-          sed -i "s/<creationDate>.*<\/creationDate>/<creationDate>$(date +'%B %Y')<\/creationDate>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+          if [ -f "package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml" ]; then
+            # Update version to YYYY.mm.dd format
+            sed -i "s/<version>.*<\/version>/<version>${{ env.VERSION }}<\/version>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+            
+            # Update creationDate to "YYYY Month DD" format
+            sed -i "s/<creationDate>.*<\/creationDate>/<creationDate>${{ env.CREATION_DATE }}<\/creationDate>/" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+            
+            echo "Updated version in XML file to ${{ env.VERSION }}"
+            echo "Updated creationDate in XML file to ${{ env.CREATION_DATE }}"
+            
+            # Display the updated XML content
+            echo "Updated XML content:"
+            grep -A 1 -B 1 "<version>" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+            grep -A 1 -B 1 "<creationDate>" package/mod_bearsampp_pricing_tables/mod_bearsampp_pricing_tables.xml
+          else
+            echo "::warning::XML file not found, skipping version update"
+          fi
       
       - name: Generate directory tree
         run: |
