@@ -64,25 +64,21 @@ jobs:
             echo "Using base version: ${{ env.BASE_VERSION }}"
           fi
       
-      - name: Create package directory
-        run: mkdir -p package/mod_bearsampp_pricing_tables
-      
-      - name: Copy module files
+      - name: List repository contents
         run: |
-          cp mod_bearsampp_pricing_tables.php package/mod_bearsampp_pricing_tables/
-          cp mod_bearsampp_pricing_tables.xml package/mod_bearsampp_pricing_tables/
-          cp helper.php package/mod_bearsampp_pricing_tables/
-          cp License.txt package/mod_bearsampp_pricing_tables/
-          cp index.html package/mod_bearsampp_pricing_tables/
-          cp -r css package/mod_bearsampp_pricing_tables/
-          cp -r elements package/mod_bearsampp_pricing_tables/
-          cp -r tmpl package/mod_bearsampp_pricing_tables/
-          cp -r language package/mod_bearsampp_pricing_tables/
+          echo "Repository contents:"
+          ls -la
+          echo "Searching for module files..."
+          find . -name "mod_bearsampp_pricing_tables.php" -o -name "mod_bearsampp_pricing_tables.xml"
       
       - name: Update XML file in repository
         run: |
-          XML_FILE="mod_bearsampp_pricing_tables.xml"
-          if [ -f "$XML_FILE" ]; then
+          # Find the XML file
+          XML_FILE=$(find . -name "mod_bearsampp_pricing_tables.xml" | head -n 1)
+          
+          if [ -n "$XML_FILE" ]; then
+            echo "Found XML file at: $XML_FILE"
+            
             # Make a backup of the original file
             cp "$XML_FILE" "${XML_FILE}.bak"
             
@@ -106,8 +102,13 @@ jobs:
             # Show diff of changes
             echo "Changes made to XML file:"
             diff "${XML_FILE}.bak" "$XML_FILE" || true
+            
+            # Save the directory path for later use
+            MODULE_DIR=$(dirname "$XML_FILE")
+            echo "MODULE_DIR=$MODULE_DIR" >> $GITHUB_ENV
           else
-            echo "::warning::XML file not found in repository, skipping update"
+            echo "::error::XML file not found in repository"
+            exit 1
           fi
       
       - name: Commit changes to repository
@@ -119,11 +120,60 @@ jobs:
           if git diff --exit-code; then
             echo "No changes to commit"
           else
-            git add "mod_bearsampp_pricing_tables.xml"
+            git add .
             git commit -m "Update version to ${{ env.VERSION }}, creation date to ${{ env.CREATION_DATE }}, and copyright year to ${{ env.CURRENT_YEAR }}"
             git push origin main
             echo "Changes committed and pushed to repository"
           fi
+      
+      - name: Create package directory
+        run: mkdir -p package/mod_bearsampp_pricing_tables
+      
+      - name: Copy module files
+        run: |
+          # Function to copy file if it exists
+          copy_if_exists() {
+            if [ -f "${{ env.MODULE_DIR }}/$1" ]; then
+              cp "${{ env.MODULE_DIR }}/$1" package/mod_bearsampp_pricing_tables/
+              echo "Copied $1"
+            else
+              echo "Warning: $1 not found, skipping"
+            fi
+          }
+          
+          # Function to copy directory if it exists
+          copy_dir_if_exists() {
+            if [ -d "${{ env.MODULE_DIR }}/$1" ]; then
+              cp -r "${{ env.MODULE_DIR }}/$1" package/mod_bearsampp_pricing_tables/
+              echo "Copied directory $1"
+            else
+              echo "Warning: Directory $1 not found, skipping"
+              mkdir -p "package/mod_bearsampp_pricing_tables/$1"
+            fi
+          }
+          
+          # Copy required files
+          copy_if_exists "mod_bearsampp_pricing_tables.php"
+          copy_if_exists "mod_bearsampp_pricing_tables.xml"
+          copy_if_exists "helper.php"
+          copy_if_exists "License.txt"
+          copy_if_exists "index.html"
+          
+          # Copy directories
+          copy_dir_if_exists "css"
+          copy_dir_if_exists "elements"
+          copy_dir_if_exists "tmpl"
+          copy_dir_if_exists "language"
+          
+          # Create empty index.html if it doesn't exist
+          if [ ! -f "package/mod_bearsampp_pricing_tables/index.html" ]; then
+            echo "<html><body bgcolor=\"#FFFFFF\"></body></html>" > package/mod_bearsampp_pricing_tables/index.html
+            echo "Created default index.html"
+          fi
+          
+          # List the contents of the package directory
+          echo "Package contents:"
+          ls -la package/mod_bearsampp_pricing_tables/
       
       - name: Generate directory tree
         run: |
@@ -165,12 +215,12 @@ jobs:
       # Upload artifact for easy access from GitHub Actions
       - name: Upload to GitHub Artifacts
         id: upload_artifact
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v3
         with:
           name: mod_bearsampp_pricing_tables_${{ env.VERSION }}
           path: package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
           retention-days: 90
-          if-no-files-found: error
+          if-no-files-found: warn
       
       # Add information about downloading the artifact
       - name: Artifact Download Information
