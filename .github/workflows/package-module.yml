@@ -107,9 +107,21 @@ jobs:
               sed -i "s|<copyright>Copyright (C)[0-9]\{4\} Bearsampp</copyright>|<copyright>Copyright (C)${{ env.COPYRIGHT_YEAR_XML }} Bearsampp</copyright>|g" "$XML_FILE"
             fi
             
+            # Update language file paths for Joomla 5 compatibility
+            sed -i "s|language/en-GB/en-GB.mod_bearsampp_pricing_tables.ini|language/en-GB/mod_bearsampp_pricing_tables.ini|g" "$XML_FILE"
+            sed -i "s|language/en-GB/en-GB.mod_bearsampp_pricing_tables.sys.ini|language/en-GB/mod_bearsampp_pricing_tables.sys.ini|g" "$XML_FILE"
+            
+            # Ensure language file paths are in lowercase
+            sed -i "s|language/en-GB/EN-GB.mod_bearsampp_pricing_tables.ini|language/en-GB/mod_bearsampp_pricing_tables.ini|g" "$XML_FILE"
+            sed -i "s|language/en-GB/EN-GB.mod_bearsampp_pricing_tables.sys.ini|language/en-GB/mod_bearsampp_pricing_tables.sys.ini|g" "$XML_FILE"
+            sed -i "s|language/en-GB/En-GB.mod_bearsampp_pricing_tables.ini|language/en-GB/mod_bearsampp_pricing_tables.ini|g" "$XML_FILE"
+            sed -i "s|language/en-GB/En-GB.mod_bearsampp_pricing_tables.sys.ini|language/en-GB/mod_bearsampp_pricing_tables.sys.ini|g" "$XML_FILE"
+            
             echo "Updated XML file in repository"
             echo "Updated XML content (specific lines):"
             grep -A 6 "<creationDate>" "$XML_FILE" || true
+            echo "Updated language file paths:"
+            grep -A 2 "<languages>" "$XML_FILE" || true
             
             # Save the directory path for later use
             MODULE_DIR=$(dirname "$XML_FILE")
@@ -119,76 +131,105 @@ jobs:
             exit 1
           fi
       
-      - name: Update language files copyright
+      - name: Update language files copyright and rename for Joomla 5
         run: |
           # Function to update copyright in a language file
           update_lang_file() {
-            local LANG_FILE=$1
-            if [ -n "$LANG_FILE" ] && [ -f "$LANG_FILE" ]; then
-              echo "Found language file at: $LANG_FILE"
+            local OLD_LANG_FILE=$1
+            local NEW_LANG_FILE=$2
+            
+            if [ -n "$OLD_LANG_FILE" ] && [ -f "$OLD_LANG_FILE" ]; then
+              echo "Found language file at: $OLD_LANG_FILE"
               
               # Make a backup of the original file
-              cp "$LANG_FILE" "${LANG_FILE}.bak"
+              cp "$OLD_LANG_FILE" "${OLD_LANG_FILE}.bak"
               
               # Display original content
               echo "Original language file content:"
-              head -n 4 "$LANG_FILE"
+              head -n 4 "$OLD_LANG_FILE"
               
               # Update copyright year in language file with year range if needed
               if [ "${{ env.CURRENT_YEAR }}" -gt "2025" ]; then
-                sed -i "s|; Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
-                sed -i "s|; Copyright (C) [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
+                sed -i "s|; Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$OLD_LANG_FILE"
+                sed -i "s|; Copyright (C) [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$OLD_LANG_FILE"
               else
-                sed -i "s|; Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
-                sed -i "s|; Copyright (C) [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
+                sed -i "s|; Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$OLD_LANG_FILE"
+                sed -i "s|; Copyright (C) [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$OLD_LANG_FILE"
               fi
               
-              echo "Updated language file in repository"
+              # If the old and new file paths are different, rename the file
+              if [ "$OLD_LANG_FILE" != "$NEW_LANG_FILE" ]; then
+                # Create directory if it doesn't exist
+                mkdir -p "$(dirname "$NEW_LANG_FILE")"
+                
+                # Copy the updated file to the new location
+                cp "$OLD_LANG_FILE" "$NEW_LANG_FILE"
+                echo "Renamed language file to: $NEW_LANG_FILE"
+              fi
+              
               echo "Updated language file content:"
-              head -n 4 "$LANG_FILE"
+              head -n 4 "$NEW_LANG_FILE"
               return 0
             else
-              echo "Warning: Language file not found at $LANG_FILE"
+              echo "Warning: Language file not found at $OLD_LANG_FILE"
               return 1
             fi
           }
           
-          # Find and update site language file
-          SITE_LANG_FILE=$(find . -name "en-GB.mod_bearsampp_pricing_tables.ini" | head -n 1)
-          update_lang_file "$SITE_LANG_FILE"
+          # Find language directory
+          LANG_DIR="${{ env.MODULE_DIR }}/language/en-GB"
+          if [ ! -d "$LANG_DIR" ]; then
+            mkdir -p "$LANG_DIR"
+          fi
           
-          # Find and update admin language file
-          ADMIN_LANG_FILE=$(find . -name "en-GB.mod_bearsampp_pricing_tables.sys.ini" | head -n 1)
-          update_lang_file "$ADMIN_LANG_FILE"
+          # Find and update site language file - search for files with different case patterns
+          OLD_SITE_LANG_FILE=$(find . -name "[eE][nN]-[gG][bB].[mM][oO][dD]_[bB][eE][aA][rR][sS][aA][mM][pP][pP]_[pP][rR][iI][cC][iI][nN][gG]_[tT][aA][bB][lL][eE][sS].[iI][nN][iI]" | head -n 1)
+          NEW_SITE_LANG_FILE="$LANG_DIR/mod_bearsampp_pricing_tables.ini"
+          update_lang_file "$OLD_SITE_LANG_FILE" "$NEW_SITE_LANG_FILE"
           
-          # If admin file doesn't exist, check if we need to create it
-          if [ ! -f "$ADMIN_LANG_FILE" ]; then
-            # Check if the XML file references an admin language file
-            XML_FILE=$(find . -name "mod_bearsampp_pricing_tables.xml" | head -n 1)
-            if grep -q "sys.ini" "$XML_FILE"; then
-              echo "XML references admin language file but file not found. Creating it..."
-              
-              # Determine the language directory
-              if [ -d "./language/en-GB" ]; then
-                LANG_DIR="./language/en-GB"
-              elif [ -d "${{ env.MODULE_DIR }}/language/en-GB" ]; then
-                LANG_DIR="${{ env.MODULE_DIR }}/language/en-GB"
-              else
-                mkdir -p "${{ env.MODULE_DIR }}/language/en-GB"
-                LANG_DIR="${{ env.MODULE_DIR }}/language/en-GB"
-              fi
-              
+          # Find and update admin language file - search for files with different case patterns
+          OLD_ADMIN_LANG_FILE=$(find . -name "[eE][nN]-[gG][bB].[mM][oO][dD]_[bB][eE][aA][rR][sS][aA][mM][pP][pP]_[pP][rR][iI][cC][iI][nN][gG]_[tT][aA][bB][lL][eE][sS].[sS][yY][sS].[iI][nN][iI]" | head -n 1)
+          NEW_ADMIN_LANG_FILE="$LANG_DIR/mod_bearsampp_pricing_tables.sys.ini"
+          update_lang_file "$OLD_ADMIN_LANG_FILE" "$NEW_ADMIN_LANG_FILE"
+          
+          # If site language file doesn't exist, try to find it with different naming patterns
+          if [ ! -f "$NEW_SITE_LANG_FILE" ]; then
+            echo "Searching for site language file with alternative patterns..."
+            ALT_SITE_LANG_FILE=$(find . -name "*.ini" -not -name "*.sys.ini" -exec grep -l "MOD_BEARSAMPP_PRICING_TABLES" {} \; | head -n 1)
+            if [ -n "$ALT_SITE_LANG_FILE" ]; then
+              cp "$ALT_SITE_LANG_FILE" "$NEW_SITE_LANG_FILE"
+              echo "Copied from $ALT_SITE_LANG_FILE to $NEW_SITE_LANG_FILE"
+              update_lang_file "$NEW_SITE_LANG_FILE" "$NEW_SITE_LANG_FILE"
+            else
+              # Create new site language file
+              echo "; Bearsampp Pricing Tables" > "$NEW_SITE_LANG_FILE"
+              echo "; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp. All rights reserved." >> "$NEW_SITE_LANG_FILE"
+              echo "; License http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL, see LICENSE.php" >> "$NEW_SITE_LANG_FILE"
+              echo "; Note : All ini files need to be saved as UTF-8" >> "$NEW_SITE_LANG_FILE"
+              echo "" >> "$NEW_SITE_LANG_FILE"
+              echo "MOD_BEARSAMPP_PRICING_TABLES=\"Bearsampp Pricing Tables\"" >> "$NEW_SITE_LANG_FILE"
+              echo "Created new site language file at: $NEW_SITE_LANG_FILE"
+            fi
+          fi
+          
+          # If admin file doesn't exist, try to find it with different naming patterns
+          if [ ! -f "$NEW_ADMIN_LANG_FILE" ]; then
+            echo "Searching for admin language file with alternative patterns..."
+            ALT_ADMIN_LANG_FILE=$(find . -name "*.sys.ini" -exec grep -l "MOD_BEARSAMPP_PRICING_TABLES" {} \; | head -n 1)
+            if [ -n "$ALT_ADMIN_LANG_FILE" ]; then
+              cp "$ALT_ADMIN_LANG_FILE" "$NEW_ADMIN_LANG_FILE"
+              echo "Copied from $ALT_ADMIN_LANG_FILE to $NEW_ADMIN_LANG_FILE"
+              update_lang_file "$NEW_ADMIN_LANG_FILE" "$NEW_ADMIN_LANG_FILE"
+            else
               # Create admin language file
-              ADMIN_LANG_FILE="$LANG_DIR/en-GB.mod_bearsampp_pricing_tables.sys.ini"
-              echo "; Bearsampp Pricing Tables" > "$ADMIN_LANG_FILE"
-              echo "; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp. All rights reserved." >> "$ADMIN_LANG_FILE"
-              echo "; License http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL, see LICENSE.php" >> "$ADMIN_LANG_FILE"
-              echo "; Note : All ini files need to be saved as UTF-8" >> "$ADMIN_LANG_FILE"
-              echo "" >> "$ADMIN_LANG_FILE"
-              echo "MOD_BEARSAMPP_PRICING_TABLES=\"Bearsampp Pricing Tables\"" >> "$ADMIN_LANG_FILE"
-              echo "MOD_BEARSAMPP_PRICING_TABLES_XML_DESCRIPTION=\"Pricing Tables module by Bearsampp\"" >> "$ADMIN_LANG_FILE"
-              
-              echo "Created admin language file at: $ADMIN_LANG_FILE"
+              echo "; Bearsampp Pricing Tables" > "$NEW_ADMIN_LANG_FILE"
+              echo "; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp. All rights reserved." >> "$NEW_ADMIN_LANG_FILE"
+              echo "; License http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL, see LICENSE.php" >> "$NEW_ADMIN_LANG_FILE"
+              echo "; Note : All ini files need to be saved as UTF-8" >> "$NEW_ADMIN_LANG_FILE"
+              echo "" >> "$NEW_ADMIN_LANG_FILE"
+              echo "MOD_BEARSAMPP_PRICING_TABLES=\"Bearsampp Pricing Tables\"" >> "$NEW_ADMIN_LANG_FILE"
+              echo "MOD_BEARSAMPP_PRICING_TABLES_XML_DESCRIPTION=\"Pricing Tables module by Bearsampp\"" >> "$NEW_ADMIN_LANG_FILE"
+              echo "Created admin language file at: $NEW_ADMIN_LANG_FILE"
             fi
           fi
       
@@ -325,6 +366,7 @@ jobs:
             - Updated version to ${{ env.VERSION }}
             - Updated creation date to ${{ env.CREATION_DATE }}
             - Updated copyright year to ${{ env.COPYRIGHT_YEAR }}
+            - Updated language files for Joomla 5 compatibility
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
