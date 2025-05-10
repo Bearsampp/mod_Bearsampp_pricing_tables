@@ -11,11 +11,11 @@
 	<description><![CDATA[<link href="../modules/mod_bearsampp_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing Tables module by Bearsampp]]></description>
 	<namespace path="src">Bearsampp\Module\PricingTables</namespace>
 	<files>
-		<filename module="MOD_BEARSAMPP_pricing_tables">mod_bearsampp_pricing_tables.php</filename>
-		<filename module="MOD_BEARSAMPP_pricing_tables">mod_bearsampp_pricing_tables.xml</filename>
-		<filename module="MOD_BEARSAMPP_pricing_tables">helper.php</filename>
-		<filename module="MOD_BEARSAMPP_pricing_tables">License.txt</filename>
-		<filename module="MOD_BEARSAMPP_pricing_tables">index.html</filename>
+		<filename module="mod_bearsampp_pricing_tables">mod_bearsampp_pricing_tables.php</filename>
+		<filename module="mod_bearsampp_pricing_tables">mod_bearsampp_pricing_tables.xml</filename>
+		<filename module="mod_bearsampp_pricing_tables">helper.php</filename>
+		<filename module="mod_bearsampp_pricing_tables">License.txt</filename>
+		<filename module="mod_bearsampp_pricing_tables">index.html</filename>
 		<folder>css</folder>
 		<folder>elements</folder>
 		<folder>tmpl</folder>
@@ -25,7 +25,7 @@
 		<language tag="en-GB">language/en-GB/en-GB.MOD_BEARSAMPP_pricing_tables.ini</language>
 	</languages>
 	<config>	
-		<fields name="params" addfieldpath="/modules/MOD_BEARSAMPP_pricing_tables/elements">
+		<fields name="params" addfieldpath="/modules/mod_bearsampp_pricing_tables/elements">
 			
 			<fieldset name="MOD_BEARSAMPP_GENERALSETTINGS">
 				<field name="bearsampp_num_images" type="radio" default="3" label="MOD_BEARSAMPP_NUMIMAGES" description="MOD_BEARSAMPP_NUMIMAGES_DESC"
@@ -53,7 +53,7 @@
 				<field name="bearsampp_title1" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
 				<field name="bearsampp_price1" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
 				<field name="bearsampp_subtitle1" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
-				<field name="bearsampp_features1" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_features1" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
 				<field name="bearsampp_highlight1" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
@@ -68,7 +68,7 @@
 				<field name="bearsampp_title2" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
 				<field name="bearsampp_price2" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
 				<field name="bearsampp_subtitle2" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
-				<field name="bearsampp_features2" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_features2" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
 				<field name="bearsampp_highlight2" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
@@ -83,7 +83,7 @@
 				<field name="bearsampp_title3" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
 				<field name="bearsampp_price3" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
 				<field name="bearsampp_subtitle3" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
-				<field name="bearsampp_features3" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_features3" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
 				<field name="bearsampp_highlight3" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
@@ -98,7 +98,7 @@
 				<field name="bearsampp_title4" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
 				<field name="bearsampp_price4" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
 				<field name="bearsampp_subtitle4" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
-				<field name="bearsampp_features4" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_features4" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
 				<field name="bearsampp_highlight4" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
