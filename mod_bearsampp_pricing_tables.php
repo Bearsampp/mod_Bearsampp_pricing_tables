@@ -19,4 +19,4 @@ use Joomla\CMS\Helper\ModuleHelper;
 require_once __DIR__ . '/helper.php';
 
 // Load the layout
-require ModuleHelper::getLayoutPath('mod_bearsampp_pricing_tables');
+require ModuleHelper::getLayoutPath('MOD_BEARSAMPP_pricing_tables');

@@ -1,3 +1,3 @@
-# Bearsampp mod_bearsampp_pricing_tables
+# Bearsampp MOD_BEARSAMPP_pricing_tables
 
 Responsive pricing tables for Joomla

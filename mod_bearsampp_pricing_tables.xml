@@ -8,27 +8,27 @@
 	<authorEmail>support@bearsampp.com</authorEmail>
 	<authorUrl>http://bearsampp.com</authorUrl>
 	<version>2025.05.10.1</version>
-	<description><![CDATA[<link href="../modules/mod_bearsampp_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing-Table module by bearsampp]]></description>
+	<description><![CDATA[<link href="../modules/MOD_BEARSAMPP_pricing_tables/css/admin.css" rel="stylesheet" type="text/css" media="all" />Pricing-Table module by bearsampp]]></description>
 	<namespace path="src">Bearsampp\Module\PricingTables</namespace>
 	<files>
-		<filename module="mod_bearsampp_pricing_tables">mod_bearsampp_pricing_tables.php</filename>
-		<filename module="mod_bearsampp_pricing_tables">mod_bearsampp_pricing_tables.xml</filename>
-		<filename module="mod_bearsampp_pricing_tables">helper.php</filename>
-		<filename module="mod_bearsampp_pricing_tables">License.txt</filename>
-		<filename module="mod_bearsampp_pricing_tables">index.html</filename>
+		<filename module="MOD_BEARSAMPP_pricing_tables">MOD_BEARSAMPP_pricing_tables.php</filename>
+		<filename module="MOD_BEARSAMPP_pricing_tables">MOD_BEARSAMPP_pricing_tables.xml</filename>
+		<filename module="MOD_BEARSAMPP_pricing_tables">helper.php</filename>
+		<filename module="MOD_BEARSAMPP_pricing_tables">License.txt</filename>
+		<filename module="MOD_BEARSAMPP_pricing_tables">index.html</filename>
 		<folder>css</folder>
 		<folder>elements</folder>
 		<folder>tmpl</folder>
 		<folder>language</folder>
 	</files>
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.mod_bearsampp_pricing_tables.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.MOD_BEARSAMPP_pricing_tables.ini</language>
 	</languages>
 	<config>	
-		<fields name="params" addfieldpath="/modules/mod_bearsampp_pricing_tables/elements">
+		<fields name="params" addfieldpath="/modules/MOD_BEARSAMPP_pricing_tables/elements">
 			
-			<fieldset name="MOD_bearsampp_GENERALSETTINGS">
-				<field name="bearsampp_num_images" type="radio" default="3" label="MOD_bearsampp_NUMIMAGES" description="MOD_bearsampp_NUMIMAGES_DESC"
+			<fieldset name="MOD_BEARSAMPP_GENERALSETTINGS">
+				<field name="bearsampp_num_images" type="radio" default="3" label="MOD_BEARSAMPP_NUMIMAGES" description="MOD_BEARSAMPP_NUMIMAGES_DESC"
 				checked="checked" 
 				class="btn-group">
 					<option value="1">1</option>
@@ -36,8 +36,8 @@
 					<option value="3">3</option>
 					<option value="4">4</option>
 				</field>
-				<field name="bearsampp_image_margin_x" type="textpx" default="20" label="MOD_bearsampp_IMAGE_MARGINH" description="MOD_bearsampp_IMAGE_MARGINH_DESC" />
-				<field name="bearsampp_image_margin_y" type="textpx" default="10" label="MOD_bearsampp_IMAGE_MARGINV" description="MOD_bearsampp_IMAGE_MARGINV_DESC" />
+				<field name="bearsampp_image_margin_x" type="textpx" default="20" label="MOD_BEARSAMPP_IMAGE_MARGINH" description="MOD_BEARSAMPP_IMAGE_MARGINH_DESC" />
+				<field name="bearsampp_image_margin_y" type="textpx" default="10" label="MOD_BEARSAMPP_IMAGE_MARGINV" description="MOD_BEARSAMPP_IMAGE_MARGINV_DESC" />
 				<field name="bearsampp_column_bg" type="color" default="#ffffff" label="Background Color" description="Set the column background color" />
 				<field name="bearsampp_header_bg" type="color" default="#ffffff" label="Header Background Color" description="Set the column header color" />
 				<field name="bearsampp_highlight_bg" type="color" default="#252525" label="Highlight Background Color" description="Set the highlight column header color" />
@@ -50,63 +50,63 @@
 			
 			
 			<fieldset name="COLUMN_01">
-				<field name="bearsampp_title1" type="text" size="60" default="" label="MOD_bearsampp_TITLE" description="MOD_bearsampp_TITLE_DESC" />
-				<field name="bearsampp_price1" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_PRICE" description="MOD_bearsampp_PRICE_DESC" />
-				<field name="bearsampp_subtitle1" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_SUBTITLE" description="MOD_bearsampp_SUBTITLE_DESC" />
-				<field name="bearsampp_features1" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
-				<field name="bearsampp_highlight1" type="radio" default="no" label="MOD_bearsampp_HIGHLIGHT" description="MOD_bearsampp_HIGHLIGHT_DESC"
+				<field name="bearsampp_title1" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
+				<field name="bearsampp_price1" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
+				<field name="bearsampp_subtitle1" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
+				<field name="bearsampp_features1" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_highlight1" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
 					<option value="no">JNO</option>
 					<option value="yes">JYES</option>
 				</field>
-				<field name="bearsampp_buttontext1" type="text" default="" label="MOD_bearsampp_BUTTONTEXT" description="MOD_bearsampp_BUTTONTEXT_DESC" published="1"/>
-				<field name="bearsampp_buttonurl1" type="text" default="" label="MOD_bearsampp_BUTTONURL" description="MOD_bearsampp_BUTTONURL_DESC" />
+				<field name="bearsampp_buttontext1" type="text" default="" label="MOD_BEARSAMPP_BUTTONTEXT" description="MOD_BEARSAMPP_BUTTONTEXT_DESC" published="1"/>
+				<field name="bearsampp_buttonurl1" type="text" default="" label="MOD_BEARSAMPP_BUTTONURL" description="MOD_BEARSAMPP_BUTTONURL_DESC" />
 			</fieldset>
 
 			<fieldset name="COLUMN_02">
-				<field name="bearsampp_title2" type="text" size="60" default="" label="MOD_bearsampp_TITLE" description="MOD_bearsampp_TITLE_DESC" />
-				<field name="bearsampp_price2" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_PRICE" description="MOD_bearsampp_PRICE_DESC" />
-				<field name="bearsampp_subtitle2" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_SUBTITLE" description="MOD_bearsampp_SUBTITLE_DESC" />
-				<field name="bearsampp_features2" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
-				<field name="bearsampp_highlight2" type="radio" default="no" label="MOD_bearsampp_HIGHLIGHT" description="MOD_bearsampp_HIGHLIGHT_DESC"
+				<field name="bearsampp_title2" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
+				<field name="bearsampp_price2" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
+				<field name="bearsampp_subtitle2" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
+				<field name="bearsampp_features2" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_highlight2" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
 					<option value="no">JNO</option>
 					<option value="yes">JYES</option>
 				</field>
-				<field name="bearsampp_buttontext2" type="text" default="" label="MOD_bearsampp_BUTTONTEXT" description="MOD_bearsampp_BUTTONTEXT_DESC" published="1"/>
-				<field name="bearsampp_buttonurl2" type="text" default="" label="MOD_bearsampp_BUTTONURL" description="MOD_bearsampp_BUTTONURL_DESC" />
+				<field name="bearsampp_buttontext2" type="text" default="" label="MOD_BEARSAMPP_BUTTONTEXT" description="MOD_BEARSAMPP_BUTTONTEXT_DESC" published="1"/>
+				<field name="bearsampp_buttonurl2" type="text" default="" label="MOD_BEARSAMPP_BUTTONURL" description="MOD_BEARSAMPP_BUTTONURL_DESC" />
 			</fieldset>
 
 			<fieldset name="COLUMN_03">
-				<field name="bearsampp_title3" type="text" size="60" default="" label="MOD_bearsampp_TITLE" description="MOD_bearsampp_TITLE_DESC" />
-				<field name="bearsampp_price3" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_PRICE" description="MOD_bearsampp_PRICE_DESC" />
-				<field name="bearsampp_subtitle3" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_SUBTITLE" description="MOD_bearsampp_SUBTITLE_DESC" />
-				<field name="bearsampp_features3" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
-				<field name="bearsampp_highlight3" type="radio" default="no" label="MOD_bearsampp_HIGHLIGHT" description="MOD_bearsampp_HIGHLIGHT_DESC"
+				<field name="bearsampp_title3" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
+				<field name="bearsampp_price3" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
+				<field name="bearsampp_subtitle3" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
+				<field name="bearsampp_features3" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_highlight3" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
 					<option value="no">JNO</option>
 					<option value="yes">JYES</option>
 				</field>
-				<field name="bearsampp_buttontext3" type="text" default="" label="MOD_bearsampp_BUTTONTEXT" description="MOD_bearsampp_BUTTONTEXT_DESC" published="1"/>
-				<field name="bearsampp_buttonurl3" type="text" default="" label="MOD_bearsampp_BUTTONURL" description="MOD_bearsampp_BUTTONURL_DESC" />
+				<field name="bearsampp_buttontext3" type="text" default="" label="MOD_BEARSAMPP_BUTTONTEXT" description="MOD_BEARSAMPP_BUTTONTEXT_DESC" published="1"/>
+				<field name="bearsampp_buttonurl3" type="text" default="" label="MOD_BEARSAMPP_BUTTONURL" description="MOD_BEARSAMPP_BUTTONURL_DESC" />
 			</fieldset>
 
 			<fieldset name="COLUMN_04">
-				<field name="bearsampp_title4" type="text" size="60" default="" label="MOD_bearsampp_TITLE" description="MOD_bearsampp_TITLE_DESC" />
-				<field name="bearsampp_price4" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_PRICE" description="MOD_bearsampp_PRICE_DESC" />
-				<field name="bearsampp_subtitle4" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_bearsampp_SUBTITLE" description="MOD_bearsampp_SUBTITLE_DESC" />
-				<field name="bearsampp_features4" type="subform" formsource="modules/mod_bearsampp_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
-				<field name="bearsampp_highlight4" type="radio" default="no" label="MOD_bearsampp_HIGHLIGHT" description="MOD_bearsampp_HIGHLIGHT_DESC"
+				<field name="bearsampp_title4" type="text" size="60" default="" label="MOD_BEARSAMPP_TITLE" description="MOD_BEARSAMPP_TITLE_DESC" />
+				<field name="bearsampp_price4" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_PRICE" description="MOD_BEARSAMPP_PRICE_DESC" />
+				<field name="bearsampp_subtitle4" type="text" filter="raw" rows="4" cols="42" default="" label="MOD_BEARSAMPP_SUBTITLE" description="MOD_BEARSAMPP_SUBTITLE_DESC" />
+				<field name="bearsampp_features4" type="subform" formsource="modules/MOD_BEARSAMPP_pricing_tables/elements/feature.xml" class="advancedSelect" min="1" max="20" multiple="true" layout="joomla.form.field.subform.repeatable" groupByFieldset="true" label="Feature(s)" description="Add column feature(s)" />
+				<field name="bearsampp_highlight4" type="radio" default="no" label="MOD_BEARSAMPP_HIGHLIGHT" description="MOD_BEARSAMPP_HIGHLIGHT_DESC"
 				checked="checked" 
 				class="btn-group">
 					<option value="no">JNO</option>
 					<option value="yes">JYES</option>
 				</field>
-				<field name="bearsampp_buttontext4" type="text" default="" label="MOD_bearsampp_BUTTONTEXT" description="MOD_bearsampp_BUTTONTEXT_DESC" published="1"/>
-				<field name="bearsampp_buttonurl4" type="text" default="" label="MOD_bearsampp_BUTTONURL" description="MOD_bearsampp_BUTTONURL_DESC" />
+				<field name="bearsampp_buttontext4" type="text" default="" label="MOD_BEARSAMPP_BUTTONTEXT" description="MOD_BEARSAMPP_BUTTONTEXT_DESC" published="1"/>
+				<field name="bearsampp_buttonurl4" type="text" default="" label="MOD_BEARSAMPP_BUTTONURL" description="MOD_BEARSAMPP_BUTTONURL_DESC" />
 			</fieldset>
 			
 			<fieldset name="advanced">

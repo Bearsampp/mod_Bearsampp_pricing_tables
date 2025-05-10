@@ -27,12 +27,21 @@ jobs:
         with:
           php-version: '8.1'
           
-      - name: Get current date
+      - name: Get current date and set copyright format
         id: date
         run: |
           echo "BASE_VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
           echo "CREATION_DATE=$(date +'%Y %B %d')" >> $GITHUB_ENV
           echo "CURRENT_YEAR=$(date +'%Y')" >> $GITHUB_ENV
+          
+          # Set copyright year format based on current year
+          if [ "$(date +'%Y')" -gt "2025" ]; then
+            echo "COPYRIGHT_YEAR=2025 - $(date +'%Y')" >> $GITHUB_ENV
+            echo "COPYRIGHT_YEAR_XML=2025 - $(date +'%Y')" >> $GITHUB_ENV
+          else
+            echo "COPYRIGHT_YEAR=$(date +'%Y')" >> $GITHUB_ENV
+            echo "COPYRIGHT_YEAR_XML=$(date +'%Y')" >> $GITHUB_ENV
+          fi
       
       - name: Check for existing tags and resolve version conflicts
         run: |
@@ -69,12 +78,12 @@ jobs:
           echo "Repository contents:"
           ls -la
           echo "Searching for module files..."
-          find . -name "mod_bearsampp_pricing_tables.php" -o -name "mod_bearsampp_pricing_tables.xml"
+          find . -name "MOD_BEARSAMPP_pricing_tables.php" -o -name "MOD_BEARSAMPP_pricing_tables.xml"
       
       - name: Update XML file in repository
         run: |
           # Find the XML file
-          XML_FILE=$(find . -name "mod_bearsampp_pricing_tables.xml" | head -n 1)
+          XML_FILE=$(find . -name "MOD_BEARSAMPP_pricing_tables.xml" | head -n 1)
           
           if [ -n "$XML_FILE" ]; then
             echo "Found XML file at: $XML_FILE"
@@ -89,7 +98,14 @@ jobs:
             # Update version, creationDate, and copyright using sed with exact line matching
             sed -i "s|<version>.*</version>|<version>${{ env.VERSION }}</version>|g" "$XML_FILE"
             sed -i "s|<creationDate>.*</creationDate>|<creationDate>${{ env.CREATION_DATE }}</creationDate>|g" "$XML_FILE"
-            sed -i "s|<copyright>Copyright (C)[0-9]\{4\} Bearsampp</copyright>|<copyright>Copyright (C)${{ env.CURRENT_YEAR }} Bearsampp</copyright>|g" "$XML_FILE"
+            
+            # Update copyright with year range if needed
+            if [ "${{ env.CURRENT_YEAR }}" -gt "2025" ]; then
+              sed -i "s|<copyright>Copyright (C)[0-9]\{4\} Bearsampp</copyright>|<copyright>Copyright (C)${{ env.COPYRIGHT_YEAR_XML }} Bearsampp</copyright>|g" "$XML_FILE"
+              sed -i "s|<copyright>Copyright (C)[0-9]\{4\} - [0-9]\{4\} Bearsampp</copyright>|<copyright>Copyright (C)${{ env.COPYRIGHT_YEAR_XML }} Bearsampp</copyright>|g" "$XML_FILE"
+            else
+              sed -i "s|<copyright>Copyright (C)[0-9]\{4\} Bearsampp</copyright>|<copyright>Copyright (C)${{ env.COPYRIGHT_YEAR_XML }} Bearsampp</copyright>|g" "$XML_FILE"
+            fi
             
             echo "Updated XML file in repository"
             echo "Updated XML content (specific lines):"
@@ -103,6 +119,73 @@ jobs:
             exit 1
           fi
       
+      - name: Update language file copyright
+        run: |
+          # Find the language file
+          LANG_FILE=$(find . -name "en-GB.MOD_BEARSAMPP_pricing_tables.ini" | head -n 1)
+          
+          if [ -n "$LANG_FILE" ]; then
+            echo "Found language file at: $LANG_FILE"
+            
+            # Make a backup of the original file
+            cp "$LANG_FILE" "${LANG_FILE}.bak"
+            
+            # Display original content
+            echo "Original language file content:"
+            head -n 4 "$LANG_FILE"
+            
+            # Update copyright year in language file with year range if needed
+            if [ "${{ env.CURRENT_YEAR }}" -gt "2025" ]; then
+              sed -i "s|; Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
+              sed -i "s|; Copyright (C) [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
+            else
+              sed -i "s|; Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
+              sed -i "s|; Copyright (C) [0-9]\{4\} Bearsampp|; Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$LANG_FILE"
+            fi
+            
+            echo "Updated language file in repository"
+            echo "Updated language file content:"
+            head -n 4 "$LANG_FILE"
+          else
+            echo "::warning::Language file not found, skipping update"
+          fi
+      
+      - name: Update CSS file copyright
+        run: |
+          # Find the CSS file
+          CSS_FILE=$(find . -name "style.css" | head -n 1)
+          
+          if [ -n "$CSS_FILE" ]; then
+            echo "Found CSS file at: $CSS_FILE"
+            
+            # Check if copyright header already exists
+            if grep -q "Copyright (C)" "$CSS_FILE"; then
+              # Update existing copyright with year range if needed
+              if [ "${{ env.CURRENT_YEAR }}" -gt "2025" ]; then
+                sed -i "s|/\* Copyright (C) [0-9]\{4\} Bearsampp \*/|/* Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp */|g" "$CSS_FILE"
+                sed -i "s|/\* Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp \*/|/* Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp */|g" "$CSS_FILE"
+                sed -i "s| \* Copyright (C) [0-9]\{4\} Bearsampp| * Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$CSS_FILE"
+                sed -i "s| \* Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp| * Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$CSS_FILE"
+              else
+                sed -i "s|/\* Copyright (C) [0-9]\{4\} Bearsampp \*/|/* Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp */|g" "$CSS_FILE"
+                sed -i "s|/\* Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp \*/|/* Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp */|g" "$CSS_FILE"
+                sed -i "s| \* Copyright (C) [0-9]\{4\} Bearsampp| * Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$CSS_FILE"
+                sed -i "s| \* Copyright (C) [0-9]\{4\} - [0-9]\{4\} Bearsampp| * Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp|g" "$CSS_FILE"
+              fi
+              echo "Updated copyright in CSS file"
+            else
+              # Add copyright header to the beginning of the file
+              COPYRIGHT_HEADER="/*\n * Bearsampp Pricing Tables\n * Copyright (C) ${{ env.COPYRIGHT_YEAR }} Bearsampp. All rights reserved.\n * License http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL\n */\n\n"
+              sed -i "1s|^|$COPYRIGHT_HEADER|" "$CSS_FILE"
+              echo "Added copyright header to CSS file"
+            fi
+            
+            echo "Updated CSS file content (first 10 lines):"
+            head -n 10 "$CSS_FILE"
+          else
+            echo "::warning::CSS file not found, skipping update"
+          fi
+      
       - name: Commit changes to repository
         run: |
           git config --global user.name "GitHub Actions"
@@ -113,20 +196,20 @@ jobs:
             echo "No changes to commit"
           else
             git add .
-            git commit -m "Update version to ${{ env.VERSION }}, creation date to ${{ env.CREATION_DATE }}, and copyright year to ${{ env.CURRENT_YEAR }}"
+            git commit -m "Update version to ${{ env.VERSION }}, creation date to ${{ env.CREATION_DATE }}, and copyright year to ${{ env.COPYRIGHT_YEAR }}"
             git push origin main
             echo "Changes committed and pushed to repository"
           fi
       
       - name: Create package directory
-        run: mkdir -p package/mod_bearsampp_pricing_tables
+        run: mkdir -p package/MOD_BEARSAMPP_pricing_tables
       
       - name: Copy module files
         run: |
           # Function to copy file if it exists
           copy_if_exists() {
             if [ -f "${{ env.MODULE_DIR }}/$1" ]; then
-              cp "${{ env.MODULE_DIR }}/$1" package/mod_bearsampp_pricing_tables/
+              cp "${{ env.MODULE_DIR }}/$1" package/MOD_BEARSAMPP_pricing_tables/
               echo "Copied $1"
             else
               echo "Warning: $1 not found, skipping"
@@ -136,17 +219,17 @@ jobs:
           # Function to copy directory if it exists
           copy_dir_if_exists() {
             if [ -d "${{ env.MODULE_DIR }}/$1" ]; then
-              cp -r "${{ env.MODULE_DIR }}/$1" package/mod_bearsampp_pricing_tables/
+              cp -r "${{ env.MODULE_DIR }}/$1" package/MOD_BEARSAMPP_pricing_tables/
               echo "Copied directory $1"
             else
               echo "Warning: Directory $1 not found, skipping"
-              mkdir -p "package/mod_bearsampp_pricing_tables/$1"
+              mkdir -p "package/MOD_BEARSAMPP_pricing_tables/$1"
             fi
           }
           
           # Copy required files
-          copy_if_exists "mod_bearsampp_pricing_tables.php"
-          copy_if_exists "mod_bearsampp_pricing_tables.xml"
+          copy_if_exists "MOD_BEARSAMPP_pricing_tables.php"
+          copy_if_exists "MOD_BEARSAMPP_pricing_tables.xml"
           copy_if_exists "helper.php"
           copy_if_exists "License.txt"
           copy_if_exists "index.html"
@@ -158,25 +241,25 @@ jobs:
           copy_dir_if_exists "language"
           
           # Create empty index.html if it doesn't exist
-          if [ ! -f "package/mod_bearsampp_pricing_tables/index.html" ]; then
-            echo "<html><body bgcolor=\"#FFFFFF\"></body></html>" > package/mod_bearsampp_pricing_tables/index.html
+          if [ ! -f "package/MOD_BEARSAMPP_pricing_tables/index.html" ]; then
+            echo "<html><body bgcolor=\"#FFFFFF\"></body></html>" > package/MOD_BEARSAMPP_pricing_tables/index.html
             echo "Created default index.html"
           fi
           
           # List the contents of the package directory
           echo "Package contents:"
-          ls -la package/mod_bearsampp_pricing_tables/
+          ls -la package/MOD_BEARSAMPP_pricing_tables/
       
       - name: Generate directory tree
         run: |
           apt-get update && apt-get install -y tree
-          tree package/mod_bearsampp_pricing_tables > package/directory-structure.txt
+          tree package/MOD_BEARSAMPP_pricing_tables > package/directory-structure.txt
       
       - name: Create ZIP archive
         run: |
           cd package
-          zip -r mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip mod_bearsampp_pricing_tables
-          echo "Created ZIP archive: mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip"
+          zip -r MOD_BEARSAMPP_pricing_tables_${{ env.VERSION }}.zip MOD_BEARSAMPP_pricing_tables
+          echo "Created ZIP archive: MOD_BEARSAMPP_pricing_tables_${{ env.VERSION }}.zip"
       
       - name: Create GitHub Release
         id: create_release
@@ -185,7 +268,7 @@ jobs:
           tag_name: ${{ env.VERSION }}
           name: Bearsampp Pricing Tables ${{ env.VERSION }}
           files: |
-            package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
+            package/MOD_BEARSAMPP_pricing_tables_${{ env.VERSION }}.zip
             package/directory-structure.txt
           draft: false
           prerelease: false
@@ -199,7 +282,7 @@ jobs:
             ### Changes:
             - Updated version to ${{ env.VERSION }}
             - Updated creation date to ${{ env.CREATION_DATE }}
-            - Updated copyright year to ${{ env.CURRENT_YEAR }}
+            - Updated copyright year to ${{ env.COPYRIGHT_YEAR }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
@@ -208,8 +291,8 @@ jobs:
         id: upload_artifact
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: mod_bearsampp_pricing_tables_${{ env.VERSION }}
-          path: package/mod_bearsampp_pricing_tables_${{ env.VERSION }}.zip
+          name: MOD_BEARSAMPP_pricing_tables_${{ env.VERSION }}
+          path: package/MOD_BEARSAMPP_pricing_tables_${{ env.VERSION }}.zip
           retention-days: 90
           if-no-files-found: warn
       
@@ -218,4 +301,4 @@ jobs:
         run: |
           echo "::notice::The module package has been uploaded as an artifact."
           echo "::notice::You can download it from the Actions tab of this workflow run."
-          echo "::notice::Go to Actions → This workflow → This run → Artifacts section → Download 'mod_bearsampp_pricing_tables_${{ env.VERSION }}'"
+          echo "::notice::Go to Actions → This workflow → This run → Artifacts section → Download 'MOD_BEARSAMPP_pricing_tables_${{ env.VERSION }}'"
