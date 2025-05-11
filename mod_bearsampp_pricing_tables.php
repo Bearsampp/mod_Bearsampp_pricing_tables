@@ -2,7 +2,7 @@
 /**
  * Bearsampp_Pricing-Table
  * 
- * @version     2025.5.10
+ * @version     2025.05.11
  * @package     Bearsampp_Pricing-Table
  * @author      Bearsampp
  * @email       support@bearsampp.com
